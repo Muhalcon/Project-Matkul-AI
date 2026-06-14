@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — nama webnya blm ada</title>
+    <title>Dashboard — Sleep Disorder Detector</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
 
@@ -69,7 +69,6 @@
         }
         .form-grid .span-2 { grid-column: span 2; }
 
-        /* Section divider dalam form */
         .form-section-label {
             grid-column: span 2;
             font-size: 0.72rem;
@@ -81,7 +80,6 @@
             margin-top: 6px;
         }
 
-        /* Slider row: label + track + value */
         .slider-row {
             display: flex;
             align-items: center;
@@ -108,7 +106,6 @@
             display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;
         }
 
-        /* hint text */
         .input-hint {
             font-size: 0.75rem;
             color: var(--muted);
@@ -148,6 +145,157 @@
 
         .disclaimer {
             font-size: 0.75rem; color: var(--faint); margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* ── XAI SECTION ─────────────────────────────────── */
+        .xai-container {
+            margin-bottom: 24px;
+            background: var(--lift);
+            padding: 20px 22px;
+            border-radius: var(--r);
+            border: 1px solid var(--faint);
+        }
+
+        .xai-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .xai-header h4 {
+            font-size: 0.95rem;
+            color: var(--moon);
+        }
+        .xai-badge {
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            background: rgba(126,170,160,0.15);
+            color: var(--sage);
+            border-radius: 20px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        #xai-summary {
+            font-size: 0.84rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Verdict banner */
+        .xai-verdict {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: var(--r);
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        .xai-verdict.verdict-normal {
+            background: rgba(126,170,160,0.08);
+            border-color: rgba(126,170,160,0.2);
+        }
+        .xai-verdict.verdict-insomnia {
+            background: rgba(196,168,130,0.08);
+            border-color: rgba(196,168,130,0.2);
+        }
+        .xai-verdict.verdict-apnea {
+            background: rgba(217,128,128,0.08);
+            border-color: rgba(217,128,128,0.2);
+        }
+        .verdict-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+        .verdict-text strong {
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .verdict-text span {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Factor bars */
+        .xai-factors-title {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            margin-bottom: 14px;
+        }
+
+        .xai-bar-row {
+            margin-bottom: 14px;
+        }
+        .xai-bar-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+        .xai-factor-name {
+            font-size: 0.83rem;
+            color: var(--moon);
+            font-weight: 500;
+        }
+        .xai-factor-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .xai-factor-pct {
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .xai-factor-suffix {
+            font-size: 0.74rem;
+            color: var(--muted);
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--rim);
+        }
+        .xai-bar-track {
+            width: 100%;
+            height: 6px;
+            background: var(--surface);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .xai-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        /* "Others" summary row */
+        .xai-others-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid var(--rim);
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Insight box */
+        .xai-insight {
+            margin-top: 16px;
+            padding: 12px 14px;
+            background: var(--surface);
+            border-radius: var(--r);
+            border-left: 2px solid;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.65;
         }
 
         /* ── HISTORY ─────────────────────────────────────── */
@@ -229,116 +377,103 @@
     <!-- ── MAIN ── -->
     <main class="main">
 
-        <!-- FORM PREDIKSI -->
         <section class="card">
             <div class="section-header">
                 <div>
-                    <h3>Evaluasi Tidur Malam Ini</h3>
-                    <p class="section-sub">Isi formulir seakurat mungkin.</p>
+                    <h3>Analisis Gangguan Tidur</h3>
+                    <p class="section-sub">Masukkan data harian Anda secara akurat untuk menganalisis risiko kualitas tidur menggunakan teknologi AI.</p>
                 </div>
             </div>
 
-            <form id="predict-form">
-                <div class="form-grid">
-
-                    <!-- SEKSI: DATA DIRI -->
-                    <div class="form-section-label">Data Diri</div>
-
-                    <div class="form-group">
-                        <label>Usia (tahun)</label>
-                        <input type="number" id="inp-age" min="18" max="80" placeholder="Contoh: 25">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Jenis Kelamin</label>
-                        <select id="inp-gender">
-                            <option value="" disabled selected>Pilih...</option>
-                            <option value="Male">Pria</option>
-                            <option value="Female">Wanita</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kategori BMI</label>
-                        <select id="inp-bmi">
-                            <option value="" disabled selected>Pilih kategori...</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Overweight">Overweight (Kelebihan berat)</option>
-                            <option value="Obese">Obese (Obesitas)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Langkah Harian</label>
-                        <input type="number" id="inp-steps" min="1000" max="20000" step="500" placeholder="Contoh: 7000">
-                        <p class="input-hint">Rata-rata langkah kaki per hari.</p>
-                    </div>
-
-                    <!-- SEKSI: POLA TIDUR -->
-                    <div class="form-section-label">Pola Tidur</div>
-
-                    <div class="form-group">
-                        <label>Durasi Tidur (jam)</label>
-                        <input type="number" id="inp-sleep" min="4" max="10" step="0.1" placeholder="Contoh: 6.5">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kualitas Tidur &nbsp;<span style="color:var(--muted);font-size:0.8rem;">(1 = buruk, 10 = sangat nyenyak)</span></label>
-                        <div class="slider-row">
-                            <input type="range" id="inp-quality" min="1" max="10" value="5" oninput="document.getElementById('quality-val').textContent=this.value">
-                            <span class="slider-val" id="quality-val">5</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Level Stres &nbsp;<span style="color:var(--muted);font-size:0.8rem;">(1 = santai, 10 = sangat stres)</span></label>
-                        <div class="slider-row">
-                            <input type="range" id="inp-stress" min="1" max="10" value="5" oninput="document.getElementById('stress-val').textContent=this.value">
-                            <span class="slider-val" id="stress-val">5</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Aktivitas Fisik (menit/hari)</label>
-                        <input type="number" id="inp-activity" min="0" max="120" placeholder="Contoh: 45">
-                        <p class="input-hint">Total durasi olahraga/gerak aktif hari ini.</p>
-                    </div>
-
-                    <!-- SEKSI: DATA KESEHATAN -->
-                    <div class="form-section-label">Data Kesehatan</div>
-
-                    <div class="form-group">
-                        <label>Tekanan Darah Sistolik (mmHg)</label>
-                        <input type="number" id="inp-systolic" min="90" max="180" placeholder="Contoh: 120">
-                        <p class="input-hint">Angka atas pada hasil tensi. Normal: 90–119.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Tekanan Darah Diastolik (mmHg)</label>
-                        <input type="number" id="inp-diastolic" min="60" max="120" placeholder="Contoh: 80">
-                        <p class="input-hint">Angka bawah pada hasil tensi. Normal: 60–79.</p>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Detak Jantung (bpm)</label>
-                        <input type="number" id="inp-hr" min="50" max="110" placeholder="Contoh: 72">
-                        <p class="input-hint">Detak jantung istirahat. Normal dewasa: 60–100 bpm.</p>
-                    </div>
-
+            <form id="predict-form" class="form-grid">
+                <div class="form-section-label">Informasi Demografis & Dasar</div>
+                
+                <div class="form-group">
+                    <label for="age">Usia (Tahun)</label>
+                    <input type="number" id="age" name="age" min="10" max="100" placeholder="Contoh: 22" required>
                 </div>
 
-                <div class="form-actions">
-                    <button type="button" class="btn btn-ghost" onclick="resetForm()">Reset</button>
-                    <button type="submit" class="btn btn-primary">Analisis Sekarang</button>
+                <div class="form-group">
+                    <label for="gender">Jenis Kelamin</label>
+                    <select id="gender">
+                        <option value="" disabled selected>Pilih jenis kelamin</option>
+                        <option value="Male">Laki-laki</option>
+                        <option value="Female">Perempuan</option>
+                    </select>
+                </div>
+
+                <div class="form-section-label">Metrik & Pola Tidur</div>
+
+                <div class="form-group">
+                    <label for="sleep_duration">Durasi Tidur Hari Ini (Jam)</label>
+                    <input type="number" id="sleep_duration" name="sleep_duration" min="1" max="24" step="0.1" placeholder="Contoh: 6.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Kualitas Tidur (Skala 1–10)</label>
+                    <div class="slider-row">
+                        <input type="range" id="quality_of_sleep" name="quality_of_sleep" min="1" max="10" value="5" oninput="document.getElementById('quality-val').textContent = this.value">
+                        <span class="slider-val" id="quality-val">5</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tingkat Stres Harian (Skala 1–10)</label>
+                    <div class="slider-row">
+                        <input type="range" id="stress_level" name="stress_level" min="1" max="10" value="5" oninput="document.getElementById('stress-val').textContent = this.value">
+                        <span class="slider-val" id="stress-val">5</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="physical_activity">Aktivitas Fisik (Menit/Hari)</label>
+                    <input type="number" id="physical_activity" name="physical_activity" min="0" max="480" placeholder="Contoh: 45" required>
+                </div>
+
+                <div class="form-section-label">Indikator Klinis / Medis</div>
+
+                <div class="form-group">
+                    <label for="bmi">Kategori Massa Tubuh (BMI)</label>
+                    <select id="bmi">
+                        <option value="" disabled selected>Pilih kategori BMI</option>
+                        <option value="Normal">Normal Weight</option>
+                        <option value="Overweight">Overweight</option>
+                        <option value="Obese">Obese</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="systolic">Tekanan Darah Sistolik (mmHg)</label>
+                    <input type="number" id="systolic" name="systolic" min="80" max="200" placeholder="Contoh: 120" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="diastolic">Tekanan Darah Diastolik (mmHg)</label>
+                    <input type="number" id="diastolic" name="diastolic" min="50" max="130" placeholder="Contoh: 80" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="heart_rate">Detak Jantung Istirahat (BPM)</label>
+                    <input type="number" id="heart_rate" name="heart_rate" min="40" max="150" placeholder="Contoh: 72" required>
+                </div>
+
+                <div class="form-group span-2">
+                    <label for="daily_steps">Jumlah Langkah Kaki Harian (Steps)</label>
+                    <input type="number" id="daily_steps" name="daily_steps" min="0" max="40000" placeholder="Contoh: 6000" required>
+                </div>
+
+                <div class="form-actions span-2">
+                    <button type="button" class="btn btn-ghost" onclick="resetForm()">Reset Input</button>
+                    <button type="submit" class="btn btn-primary">Mulai Analisis AI</button>
                 </div>
             </form>
         </section>
 
-        <!-- HASIL PREDIKSI -->
+        <!-- ── RESULT CARD ── -->
         <section class="card" id="result-card">
             <div class="result-header">
                 <div>
-                    <h3>Hasil Analisis</h3>
+                    <h3>Hasil Analisis AI</h3>
                     <div class="result-meta">
                         Tidur <strong id="res-dur">—</strong> jam &nbsp;·&nbsp;
                         Kualitas <strong id="res-quality">—</strong>/10 &nbsp;·&nbsp;
@@ -348,18 +483,53 @@
                 <span class="tag" id="res-label">—</span>
             </div>
 
+            <hr class="divider" style="margin-bottom:20px;">
+
+            <!-- XAI EXPLAINABILITY SECTION -->
+            <div class="xai-container">
+
+                <div class="xai-header">
+                    <h4>Mengapa AI Menyimpulkan Ini?</h4>
+                    <span class="xai-badge">Explainable AI</span>
+                </div>
+                <p id="xai-summary"></p>
+
+                <!-- Verdict banner -->
+                <div class="xai-verdict" id="xai-verdict">
+                    <div class="verdict-icon" id="verdict-icon">—</div>
+                    <div class="verdict-text">
+                        <strong id="verdict-title">—</strong>
+                        <span id="verdict-desc">—</span>
+                    </div>
+                </div>
+
+                <!-- Factor contribution bars -->
+                <p class="xai-factors-title">Kontribusi Faktor Utama terhadap Prediksi</p>
+                <div id="xai-factors-list"></div>
+
+                <!-- Others summary -->
+                <div class="xai-others-row">
+                    <span>Faktor lainnya (Usia, Jenis Kelamin, Langkah Kaki)</span>
+                    <span id="xai-others-pct" style="font-weight:500; color: var(--moon);">—</span>
+                </div>
+
+                <!-- Natural-language insight -->
+                <div class="xai-insight" id="xai-insight"></div>
+            </div>
+
             <hr class="divider" style="margin-bottom:16px;">
 
+            <p style="font-size:0.88rem; color:var(--moon); margin-bottom:10px; font-weight:500;">Rekomendasi Tindakan:</p>
             <p style="font-size:0.88rem; color:var(--muted); margin-bottom:10px;" id="res-intro"></p>
             <ul class="result-tips" id="res-tips"></ul>
 
             <p class="disclaimer">
-                * Analisis ini bersifat indikatif berdasarkan model machine learning dan tidak menggantikan diagnosis medis profesional.
+                * Analisis ini didukung oleh Explainable AI (XAI) untuk transparansi model. Hasil bersifat indikatif dan tidak menggantikan diagnosis medis profesional.
             </p>
         </section>
 
-        <!-- RIWAYAT -->
-        <section class="card" id="history-section">
+        <!-- ── HISTORY ── -->
+        <section class="card" id="history-section" style="margin-top: 12px;">
             <div class="section-header">
                 <div>
                     <h3>Riwayat Analisis</h3>
@@ -369,7 +539,7 @@
                 </button>
             </div>
             <div class="history-list" id="history-list"></div>
-            <div class="history-empty" id="history-empty" style="display:none;">
+            <div class="history-empty" id="history-empty">
                 <span style="font-size:1.5rem;">🌙</span>
                 <p>Belum ada riwayat analisis.<br>Isi form di atas untuk memulai.</p>
             </div>
@@ -379,7 +549,7 @@
 </div>
 
 <footer>
-    <p>pikirin nama webnya woi. &nbsp;·&nbsp; Prediktor Sleep Disorder.</p>
+    <p>Sleep Disorder Detector &nbsp;·&nbsp; Syifa · Zefa · Ranabil &nbsp;·&nbsp; 2026</p>
 </footer>
 
 <script src="js/dashboard.js"></script>
